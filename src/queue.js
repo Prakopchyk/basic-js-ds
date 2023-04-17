@@ -13,21 +13,87 @@ const { NotImplementedError } = require('../extensions/index.js');
  * queue.dequeue(); // returns the top element from queue and deletes it, returns 1
  * queue.getUnderlyingList() // returns { value: 3, next: null }
  */
-class Queue {
+class ListNode {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
 
-  getUnderlyingList() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
   }
 
-  enqueue(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  // Add a new node to the end of the linked list
+  append(value) {
+    const newNode = new ListNode(value);
+
+    if (!this.head) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+
+    this.length++;
+  }
+
+  // Remove the first node from the linked list
+  deleteHead() {
+    if (!this.head) {
+      return null;
+    }
+
+    const deletedNode = this.head;
+
+    if (this.head === this.tail) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.head = this.head.next;
+    }
+
+    this.length--;
+    return deletedNode;
+  }
+
+  enumerate() {
+    if (this.head === null) {
+      return {};
+    }
+
+    var node = this.head;
+    var root = { value: node.value, next: null }
+    var obj = root;
+
+    while (node.next !== null) {
+      obj.next = { value: node.next.value, next: null }
+      node = node.next;
+      obj = obj.next;
+    }
+    return root;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.linkedList = new LinkedList();
+  }
+
+  getUnderlyingList() {
+    return this.linkedList.enumerate();
+  }
+
+  enqueue(value) {
+    this.linkedList.append(value);
   }
 
   dequeue() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.linkedList.deleteHead().value
   }
 }
 
